@@ -1,0 +1,23 @@
+.gooseButton {
+  width: 200px;
+  height: 200px;
+  font-size: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+
+  &:not(:disabled):hover {
+    transform: scale(1.05);
+  }
+
+  &:not(:disabled):active {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}

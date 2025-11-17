@@ -1,0 +1,79 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.backButton {
+  margin-bottom: 16px;
+}
+
+.card {
+  text-align: center;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.statusTag {
+  font-size: 14px;
+  padding: 4px 12px;
+}
+
+.gooseContainer {
+  display: flex;
+  justify-content: center;
+  margin: 32px 0;
+}
+
+.stateContainer {
+  margin: 24px 0;
+  padding: 24px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.myScore {
+  margin-top: 16px;
+  
+  :global(.ant-statistic-title) {
+    font-size: 16px;
+  }
+  
+  :global(.ant-statistic-content) {
+    font-size: 32px;
+    color: #1890ff;
+  }
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  
+  :global(.ant-statistic) {
+    text-align: center;
+  }
+}
+
+.dates {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #f0f0f0;
+}

@@ -1,0 +1,38 @@
+.layout {
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #001529;
+}
+
+.logo {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  
+  &:hover {
+    color: #40a9ff;
+  }
+}
+
+.userSection {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.username {
+  color: white;
+}
+
+.logoutButton {
+  color: white;
+}
+
+.content {
+  padding: 24px;
+}
