@@ -18,7 +18,6 @@ export async function withRetry<T>(
       // Retry только для конфликтов сериализации и deadlock
       const isRetryable =
         error.code === 'P2034' || // Prisma: transaction conflict
-        error.code === '40001' || // Postgres: serialization_failure
         error.code === '40P01';   // Postgres: deadlock_detected
 
       if (!isRetryable || attempt === maxRetries - 1) {

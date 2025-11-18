@@ -17,7 +17,6 @@ export class TapService {
     roundId: string,
     userRole: UserRole
   ): Promise<TapResponseDTO> {
-    // Оборачиваем транзакцию в retry механизм
     return withRetry(async () => {
       return await this.prisma.$transaction(
         async (tx) => {
@@ -35,17 +34,8 @@ export class TapService {
             tx
           );
 
-          // Если нет — создаем
-          if (!stats) {
-            stats = await this.playerStatsRepository.createEmpty(
-              userId,
-              roundId,
-              tx
-            );
-          }
-
-          // 3. Считаем новый tapCount заранее
-          const newTapCount = stats.taps + 1;
+          // 3. Вычисляем новый tapCount
+          const newTapCount = (stats?.taps || 0) + 1;
 
           // 4. Считаем очки по бизнес-правилам
           const pointsToAdd =
@@ -55,8 +45,8 @@ export class TapService {
               ? 10
               : 1;
 
-          // 5. Атомарно увеличиваем taps + score
-          const updatedStats = await this.playerStatsRepository.updateStats(
+          // 5. Атомарно upsert + increment (без race condition!)
+          const updatedStats = await this.playerStatsRepository.upsertAndIncrement(
             userId,
             roundId,
             pointsToAdd,
@@ -73,9 +63,9 @@ export class TapService {
             score: updatedStats.score,
           };
         },
+        // Read Committed по идее по дефолту, но оставлю явно для наглядности
         {
-          // Serializable уровень изоляции для максимальной защиты от race conditions
-          isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+          isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted,
         }
       );
     }, 3);

@@ -15,15 +15,7 @@ export interface IPlayerStatsRepository {
     tx: Prisma.TransactionClient
   ): Promise<PlayerRoundStats | null>;
   
-  // Создание пустой записи статистики при первом тапе
-  createEmpty(
-    userId: string,
-    roundId: string,
-    tx: Prisma.TransactionClient
-  ): Promise<PlayerRoundStats>;
-  
-  // Атомарное обновление taps и score за одну операцию
-  updateStats(
+  upsertAndIncrement(
     userId: string,
     roundId: string,
     pointsToAdd: number,

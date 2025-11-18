@@ -6,12 +6,10 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Layout, GooseButton, RoundTimer } from '@/components';
 import { getRoundById, tap } from '@/api/endpoints';
 import { formatDateTime } from '@/utils/format';
-import { RoundStatus, UserRole } from '@/types/enums';
+import { RoundStatus } from '@/types/enums';
 import { ROUND_STATUS_COLORS, ROUND_STATUS_LABELS } from '@/constants';
 import styles from './RoundPage.module.scss';
 import { AxiosError } from 'axios';
-import { useAuth } from '@/hooks/useAuth';
-import { RoundDetails } from '@/types/models';
 
 const { Title, Text } = Typography;
 
@@ -19,7 +17,6 @@ export function RoundPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { user } = useAuth();
   // Получаем детали раунда с автообновлением
   const { data: round, isLoading } = useQuery({
     queryKey: ['round', id],
@@ -32,39 +29,14 @@ export function RoundPage() {
     },
   });
 
-  // Мутация тапа с оптимистичным обновлением
   const tapMutation = useMutation({
     mutationFn: () => tap(id!),
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ['round', id] });
-
-      const previousRound = queryClient.getQueryData(['round', id]);
-
-      // Оптимистично обновляем только если не Никита
-      if (user?.role !== UserRole.NIKITA) {
-        queryClient.setQueryData(['round', id], (old: RoundDetails) => {
-          if (!old) return old;
-          return {
-            ...old,
-            myStats: {
-              taps: old.myStats.taps + 1,
-              score: old.myStats.score + 1,
-            },
-          };
-        });
-      }
-
-      return { previousRound };
-    },
-    onError: (error: AxiosError<{ error: string }>, _, context) => {
-      if (context?.previousRound) {
-        queryClient.setQueryData(['round', id], context.previousRound);
-      }
-      const errorMessage = error.response?.data?.error || 'Ошибка тапа';
-      message.error(errorMessage);
-    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['round', id] });
+    },
+    onError: (error: AxiosError<{ error: string }>) => {
+      const errorMessage = error.response?.data?.error || 'Ошибка тапа';
+      message.error(errorMessage);
     },
   });
 

@@ -19,34 +19,26 @@ export class PlayerStatsRepository implements IPlayerStatsRepository {
     return result[0] || null;
   }
 
-  async createEmpty(
-    userId: string,
-    roundId: string,
-    tx: Prisma.TransactionClient
-  ): Promise<PlayerRoundStats> {
-    return tx.playerRoundStats.create({
-      data: {
-        userId,
-        roundId,
-        taps: 0,
-        score: 0
-      }
-    });
-  }
-
-  // Атомарное обновление taps и score за одну операцию
-  async updateStats(
+  async upsertAndIncrement(
     userId: string,
     roundId: string,
     pointsToAdd: number,
     tx: Prisma.TransactionClient
   ): Promise<PlayerRoundStats> {
-    return tx.playerRoundStats.update({
-      where: { userId_roundId: { userId, roundId } },
-      data: {
+    return tx.playerRoundStats.upsert({
+      where: {
+        userId_roundId: { userId, roundId },
+      },
+      update: {
         taps: { increment: 1 },
-        score: { increment: pointsToAdd }
-      }
+        score: { increment: pointsToAdd },
+      },
+      create: {
+        userId,
+        roundId,
+        taps: 1,
+        score: pointsToAdd,
+      },
     });
   }
 
