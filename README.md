@@ -39,7 +39,7 @@ npm run dev
 
 ## Особенности
 
-- Race conditions решены (FOR UPDATE + Serializable + Retry)  
+- Race conditions решены (FOR UPDATE + Retry)  
 
 ## Правила игры
 
