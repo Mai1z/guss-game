@@ -1,8 +1,8 @@
 # The Last of Guss 🦆
 
-Браузерная игра где игроки соревнуются в тапах по гусю с мутацией G-42.
+A browser-based game where players compete by tapping on a goose infected with the G-42 mutation.
 
-## Быстрый старт
+## Quick Start
 
 ### 1. Backend
 ```bash
@@ -21,9 +21,9 @@ npm install
 npm run dev
 ```
 
-Откройте http://localhost:5173
+Open http://localhost:5173
 
-## Технологии
+## Tech Stack
 
 **Backend:**
 - Node.js + TypeScript
@@ -37,13 +37,13 @@ npm run dev
 - Ant Design
 - React Query
 
-## Особенности
+## Features
 
-- Race conditions решены (FOR UPDATE + Retry)  
+- Race conditions are handled using `FOR UPDATE` and retry logic.
 
-## Правила игры
+## Game Rules
 
-- 1 тап = 1 очко
-- Каждый 11-й тап = 10 очков
-- Роль "Никита" - тапы не считаются
-- Роль "admin" - может создавать раунды
+- 1 tap = 1 point
+- Every 11th tap = 10 points
+- The **"Nikita"** role — taps do not count.
+- The **"admin"** role — can create new rounds.
